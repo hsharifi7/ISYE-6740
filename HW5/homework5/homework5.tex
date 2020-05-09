@@ -1,0 +1,114 @@
+\documentclass[twoside,12pt]{article}
+\usepackage{amsmath,amsfonts,amsthm,fullpage,amssymb}
+%\usepackage{mymath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+
+\begin{document}
+
+\title{ISYE 6740 Homework 5}
+\author{Prof. Yao Xie}
+\date{Due: March 15, 2020 \\Total Point: 100.}
+\maketitle
+
+
+%----------------------------------------------------------------------------------
+
+\begin{enumerate}
+
+\item{\bf SVM. } (20 points)
+
+\begin{enumerate}
+\item (6 points) Explain why can we set the margin $c = 1$ to derive an equivalent SVM formulation?
+\item (7 points) Using Lagrangian dual formulation, show that the weight vector can be represented as
+\[
+w = \sum_{i=1}^n \alpha_i y_i x_i.
+\]
+where $\alpha_i \geq 0$ are the dual variables. What does this imply in terms of how to relate data to $w$?
+\item (7 points) Explain why only the data points on the ``margin'' will contribute to the sum above, i.e., playing a role in defining $w$. Hint: use the Lagrangian multiplier derivation and KKT condition we discussed in class. 
+
+\end{enumerate}
+
+
+\clearpage
+
+\item {\bf Naive Bayes for spam filtering}. (Bonus question: 40 points) 
+
+In this problem we will use the Naive Bayes algorithm to fit a spam filter by hand. This will enhance your understanding to Bayes classifier and build intuition. 
+
+Spam filters are used in all email services to classify received emails as ``Spam'' or ``Not Spam''. A simple approach involves maintaining a vocabulary of words that commonly occur in ``Spam'' emails and classifying an email as ``Spam'' if the number of words from the dictionary that are present in the email is over a certain threshold.
+We are given the vocabulary consists of 15 words 
+\[\small V=\{\textsf{secret, offer, low, price, valued, customer, today, dollar, million, sports, is, for, play, healthy, pizza}\}.\] We will use $V_i$ to represent the $i$th word in $V$. As our training dataset, we are also given 3 example spam messages,
+\begin{itemize}
+\item \textsf{million dollar offer}
+\item \textsf{secret offer today}
+\item \textsf{secret is secret}
+\end{itemize}
+and 4 example non-spam messages
+\begin{itemize}
+\item \textsf{low price for valued customer}
+\item \textsf{play secret sports today}
+\item \textsf{sports is healthy}
+\item \textsf{low price pizza}
+\end{itemize}
+
+Recall that the Naive Bayes classifier assumes the probability of an input $x = [x_1, x_2, \ldots, x_n]^T$ depends on its class $y$. In our case the input vector $x$ corresponding to each message has length $n = 15$ equal to the number of words in the vocabulary $V$, where each entry $x_i$ is equal to the number of times word $V_i$ occurs in $x$.
+
+\begin{enumerate}
+\item (10 points) Calculate $\mathbb P(y = 0)$ and $\mathbb P(y = 1)$ from the training data, where $y = 0$ corresponds to spam messages, and $y = 1$ corresponds to non-spam messages.
+\item (10 points) List the feature vector $x$ for each spam and non-spam message.
+\item (10 points) In the Naive Bayes model, the likelihood of a sentence with feature vector $x$ given a class $c$ is
+\[
+\mathbb P (x|y = c) = \prod_{k=1}^n \theta_{c, k}^{x_k}
+\]
+where $\theta_{c,k} \in (0, 1)$ is the weight of word $k$ in class $c$, which satisfies $\sum_{k=1}^n \theta_{c, k} = 1$, $\forall c$. Calculate the maximum likelihood estimates of $\theta_{0,1}$, $\theta_{0,7}$, $\theta_{1,1}$, $\theta_{1,15}$ by maximizing $\mathbb P (x|y = c)$ with respect to $\theta_{c, k}$ and given data. (Hint: Consider the Lagrangian function for solving this constrained optimization problem. You only need to introduce one Lagrangian multiplier because you only have one constraint. Consider log-likelihood (i.e., taking log of the cost function). Then solve it from there.)
+\item (10 points) Given a new message ``\textsf{today is secret}'', decide whether it is spam or not spam, based on the Naive
+Bayes classifier, learned from the above data.
+
+\end{enumerate}
+
+
+
+
+\clearpage
+
+\item {\bf Comparing Bayes, logistic, and KNN classifiers.} (40 points)
+
+In lectures we learn three different classifiers. This question is to implement and compare them. We are suggest use \textsf{Scikit-learn}, which is a commonly-used and powerful \textsf{Python} library with various machine learning tools. But you can also use other similar library in other languages of your choice to perform the tasks. 
+
+
+\begin{enumerate}
+
+\item \textbf{Part One (Divorce classification/prediction).} (20 points) 
+
+This dataset is about participants who completed the personal information form and a divorce predictors scale. 
+
+The data is a modified version of the publicly available at \url{https://archive.ics.uci.edu/ml/datasets/Divorce+Predictors+data+set} (by injecting noise so you will not replicate the results on uci website). There are 170 participants and 54 attributes (or predictor variables) that are all real-valued. The dataset \textbf{q3.csv}. The last column of the CSV file is label $y$ (1 means ``divorce'', 0 means ``no divorce''). Each column is for one feature (predictor variable), and each row is a sample (participant). A detailed explanation for each feature (predictor variable) can be found at the website link above. Our goal is to build a classifier using training data, such that given a test sample, we can classify (or essentially predict) whether its label is 0 (``no divorce'') or 1 (``divorce''). 
+
+
+
+Build three classifiers using (Naive Bayes, Logistic Regression, KNN). Use the first $80\%$ data for training and the remaining $20\%$ for testing. If you use \textsf{scikit-learn} you can use \textsf{train\_test\_split} to split the dataset. 
+
+\begin{enumerate}
+
+	\item Report testing accuracy for each of the three classifiers.  Comment on their performance: which performs the best and make a guess why they perform the best in this setting. 
+	\item Use the first two features to train three new classifiers. Plot the data points and decision boundary of each classifier. Comment on the difference between the decision boundary for the three classifiers. Please clearly represent the data points with different labels using different colors.
+\end{enumerate}
+
+\item \textbf{Part Two (Handwritten digits classification).} (20 points) 
+
+
+
+Repeat the above using the \textbf{MNIST Data} in our previous homework. Here, give ``digit'' 6 label $y = 1$, and give ``digit'' 2 label $y = 0$. All the pixels in each image will be the feature (predictor variables) for that sample (i.e., image). Our goal is to build classifier to such that given a new test sample, we can tell is it a 2 or a 6. Using the first $80\%$ of the samples for training and remaining $20\%$ for testing. Report the classification accuracy on testing data, for each of the three classifiers. Comment on their performance: which performs the best and make a guess why they perform the best in this setting. 
+
+\end{enumerate}
+
+
+
+
+\end{enumerate}
+
+\end{document}

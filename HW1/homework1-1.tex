@@ -1,0 +1,127 @@
+\documentclass[twoside,10pt]{article}
+\usepackage{amsmath,amsfonts,amsthm,fullpage}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+\title{ISYE 6740 Homework 1}
+%\author{Yao Xie}
+\date{}
+%\date{Deadline: Jan. 30, Tues., 11:55pm}
+\maketitle
+
+%\begin{itemize}
+%  \item Submit your answers as an electronic copy on T-square.
+%  \item No unapproved extension of deadline is allowed. Zero credit will be assigned for late submissions. Email request for late submission may not be replied.
+%  \item For typed answers with LaTeX (recommended) or word processors, extra credits will be given. If you handwrite, try to be clear as much as possible. No credit may be given to unreadable handwriting.
+%  \item Explicitly mention your collaborators if any.
+%\end{itemize}
+
+%----------------------------------------------------------------------------------
+
+\section{Clustering [60 points]}
+
+
+
+\textbf{[a-b]} Given $N$ data points $\text x^n (n=1,\dots,N)$, $K$-means clustering algorithm groups them into $K$ clusters by minimizing the distortion function over $\{ r^{nk}, \mu^k \}$
+$$J=\sum_{n=1}^N\sum_{k=1}^Kr^{nk} \|\text x^n-\mu^k\|^2,$$
+where $r^{nk}=1$ if $\text x^n$ belongs to the $k$-th cluster and $r^{nk}=0$ otherwise.
+
+\subsubsection*{(a) [20 points] Prove that using the squared Euclidean distance $\|\text x^n-\mu^k\|^2$ as the dissimilarity function and minimizing the distortion function, we will have 
+   $$\mu^k=\frac{\sum_n r^{nk} \text x^n}{\sum_n r^{nk}}.$$
+   That is, $\mu^k$ is the center of $k$-th cluster. }
+
+\subsubsection*{(b) [20 points] Prove that $K$-means algorithm converges to a local optimum in finite steps. }
+
+\subsubsection*{(c) [20 points] For the following data (two moons), which of these three distance metrics below (if any) would successfully separate the two moons? Explain the reasoning}
+
+%\textbf{[c-d]} In class, we discussed bottom-up hierarchical clustering. For each iteration, we need to find two clusters $\{\text x_1, \text x_2, \dots, \text x_m\}$ and $\{\text y_1, \text y_2, \dots, \text y_p\}$ with the minimum distance to merge. 
+
+Some of the most commonly used distance metrics between two clusters are:
+    \begin{itemize}
+    \item Single linkage: the minimum distance between any pairs of points from the two clusters, i.e.
+    $$\min_{i=1,\dots,m \atop j=1,\dots, p}\|\text x_i - \text y_j\|$$
+    \item Complete linkage: the maximum distance between any parts of points from the two clusters, i.e.
+    $$\max_{i=1,\dots,m \atop j=1,\dots, p}\|\text x_i - \text y_j\|$$
+    \item Average linkage: the average distance between all pair of points from the two clusters, i.e.
+    $$\frac{1}{mp}\sum_{i=1}^m\sum_{j=1}^p\|\text x_i - \text y_j\|$$
+    \end{itemize}
+
+%\subsubsection*{(c) When we use the bottom up hierarchical clustering to realize the partition of data, which of the three cluster distance metrics described above would most likely result in clusters most similar to those given by $K$-means? (Suppose $K$ is a power of 2 in this case). [5 pts]}
+
+
+\includegraphics[trim = 0mm 90mm 0mm 90mm, clip, width = \linewidth]{clustering}
+
+\vspace{1cm}
+
+\section{Image compression using clustering [40 points]}
+
+In this programming assignment, you are going to apply clustering algorithms for image compression. Your task is implementing the clustering parts with two algorithms: \emph{$K$-means} and \emph{$K$-medoids}.  {\bf It is required you implementing the algorithms yourself rather than calling from a package.} %Before starting this assignment, we strongly recommend reading PRML Section 9.1.1, page 428 -- 430.
+
+%To ease your implementation, we provide a skeleton code containing image processing part. \texttt{homework2.m} is designed to read an RGB bitmap image file, then cluster pixels with the given number of clusters $K$. It shows converted image only using $K$ colors, each of them with the representative color of centroid. %To see what it looks like, you are encouraged to run \texttt{homework2(`beach.bmp', 3)} or \texttt{homework2(`football.bmp', 2)}, for example.
+
+%We learned and demonstrated $K$-means in class, so you may start from the sample code we distributed.
+
+%The file you need to edit is \texttt{mykmeans.m} and \texttt{mykmedoids.m}, provided with this homework. In the files, you can see it calls Matlab function \texttt{kmeans} initially. Comment this line out, and implement your own in the files. You would expect to see similar result with your implementation of $K$-means, instead of \texttt{kmeans} function in Matlab.
+
+\subsubsection*{$K$-medoids}
+
+In class, we learned that the basic $K$-means works in Euclidean space for computing distance between data points as well as for updating centroids by arithmetic mean. Sometimes, however, the dataset may work better with other distance measures. It is sometimes even impossible to compute arithmetic mean if a feature is categorical, e.g, gender or nationality of a person. With $K$-medoids, you choose a representative data point for each cluster instead of computing their average.
+
+Given $N$ data points $\text x^n (n = 1, ..., N)$, $K$-medoids clustering algorithm groups them into $K$ clusters by minimizing the distortion function $J = \sum_{n=1}^N \sum_{k=1}^K r^{nk} D(\text x^n, \mu^k)$,
+where $D(\text x, \text y)$ is a distance measure between two vectors $\text x$ and $\text y$ in same size (in case of $K$-means, $D(x, y) = \| \text x - \text y \|^2$), $\mu^k$ is the center of $k$-th cluster; and $r^{nk} = 1$ if $\text x^n$ belongs to the $k$-th cluster and $r^{nk} = 0$ otherwise. In this exercise, we will use the following iterative procedure:
+
+\begin{itemize}
+  \item Initialize the cluster center $\mu^k$, $k = 1, ..., K$.
+  \item Iterate until convergence:
+  \begin{itemize}
+    \item Update the cluster assignments for every data point $\text x^n$: $r^{nk} = 1$ if $k = \arg\min_j D(\text x^n, \mu^j)$, and $r^{nk} = 0$ otherwise.
+    \item Update the center for each cluster $k$: choosing another representative if necessary.
+  \end{itemize}
+\end{itemize}
+
+There can be many options to implement the procedure; for example, you can try many distance measures in addition to Euclidean distance, and also you can be creative for deciding a better representative of each cluster. We will not restrict these choices in this assignment. You are encouraged to try many distance measures as well as way of choosing representatives.
+
+\subsubsection*{Formatting instruction}
+
+%Both \texttt{mykmeans.m} and \texttt{mykmedoids.m} take input and output format as follows. You should not alter this definition, otherwise your submission will print an error, which leads to zero credit.\\
+
+\textbf{Input}
+\begin{itemize}
+  \item \texttt{pixels}: the input image representation. Each row contains one data point (pixel). For image dataset, it contains 3 columns, each column corresponding to Red, Green, and Blue component. Each component has an integer value between 0 and 255.
+  \item \texttt{K}: the number of desired clusters. Too high value of $K$ may result in empty cluster error. Then, you need to reduce it.
+\end{itemize}
+
+\textbf{Output}
+\begin{itemize}
+  \item \texttt{class}: cluster assignment of each data point in pixels. The assignment should be 1, 2, 3, etc. For $K = 5$, for example, each cell of class should be either 1, 2, 3, 4, or 5. The output should be a column vector with \texttt{size(pixels, 1)} elements.
+  \item \texttt{centroid}: location of $K$ centroids (or representatives) in your result. With images, each centroid corresponds to the representative color of each cluster. The output should be a matrix with $K$ rows and 3 columns. The range of values should be [0, 255], possibly floating point numbers.
+\end{itemize}
+
+\subsubsection*{Hand-in}
+Both of your code and report will be evaluated. Upload them together as a zip file. In your report, answer to the following questions:
+\begin{enumerate}
+  \item Within the $K$-medoids framework, you have several choices for detailed implementation. Explain how you designed and implemented details of your $K$-medoids algorithm, including (but not limited to) how you chose representatives of each cluster, what distance measures you tried and chose one, or when you stopped iteration.
+  \item Attach a picture of your own. We recommend size of $320 \times 240$ or smaller.
+  \item Run your $K$-medoids implementation with the picture you chose above, with several different $K$. (e.g, small values like 2 or 3, large values like 16 or 32) What did you observe with different $K$? How long does it take to converge for each $K$?
+  \item Run your $K$-medoids implementation with different initial centroids/representatives. Does it affect final result? Do you see same or different result for each trial with different initial assignments? (We usually randomize initial location of centroids in general. To answer this question, an intentional poor assignment may be useful.)
+  \item Repeat question 2 and 3 with $K$-means. Do you see significant difference between $K$-medoids and $K$-means, in terms of output quality, robustness, or running time?
+\end{enumerate}
+
+
+\subsubsection*{Note}
+\begin{itemize}
+  \item You may see some error message about empty clusters when you use too large $K$. Your implementation should treat this exception as well. That is, do not terminate even if you have an empty cluster, but use smaller number of clusters in that case.
+
+  \item We will grade using test pictures which are not provided. We recommend you to test your code with several different pictures so that you can detect some problems that might happen occasionally. 
+
+  \item If we detect copy from any other student's code or from the web, you will not be eligible for any credit for the entire homework, not just for the programming part. Also, directly calling built-in functions or from other package functions is not allowed.
+\end{itemize}
+
+
+
+
+\end{document}

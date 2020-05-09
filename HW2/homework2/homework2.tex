@@ -1,0 +1,51 @@
+\documentclass[twoside,10pt]{article}
+\usepackage{amsmath,amsfonts,amsthm,fullpage}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+\title{ISYE 6740 Homework 2}
+\date{}
+%\author{Yao Xie}
+%\date{Deadline: Jan. 30, Tues., 11:55pm}
+\maketitle
+
+%\begin{itemize}
+%  \item Submit your answers as an electronic copy on T-square.
+%  \item No unapproved extension of deadline is allowed. Zero credit will be assigned for late submissions. Email request for late submission may not be replied.
+%  \item For typed answers with LaTeX (recommended) or word processors, extra credits will be given. If you handwrite, try to be clear as much as possible. No credit may be given to unreadable handwriting.
+%  \item Explicitly mention your collaborators if any.
+%\end{itemize}
+
+%----------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------
+
+
+\section{Spectral clustering [50 points]}
+
+\begin{enumerate}
+\item (20 points) Consider an undirected graph with non-negative edge weights $w_{ij}$ and graph Laplacian $L$. Suppose there are $m$ connected components $A_1, A_2, \ldots, A_m$ in the graph. Show that there are $m$ eigenvectors of $L$ corresponding to eigenvalue zero, and the indicator vectors of these components $I_{A_1}, \ldots, I_{A_m}$ span the zero eigenspace. 
+\item (30 points) Real data: political blogs dataset.  We will study a political blogs dataset first compiled for the paper Lada A. Adamic and Natalie Glance, ``The political blogosphere and the 2004 US Election'', in Proceedings of the WWW-2005 Workshop on the Weblogging Ecosystem (2005). The dataset \textsf{nodes.txt} contains a graph with $n = 1490$ vertices (``nodes'') corresponding to political blogs. Each vertex has a 0-1 label (in the 3rd column) corresponding to the political orientation of that blog. We will consider this as the true label and try to reconstruct the true label from the graph using the spectral clustering on the graph. The dataset \textsf{edges.txt} contains edges between the vertices. 
+
+Here we assume the number of clusters to be estimated is $k = 2$. Using spectral clustering to find the 2 clusters. Compare the clustering results with the true labels. What is the false classification rate (the percentage of nodes that are classified incorrectly).
+\end{enumerate}
+
+
+\section{PCA: Food consumption in European area [50 points]}
+
+The data \textsf{food-consumption.csv} contains 16 countries in the European area and their consumption for 20 food items, such as tea, jam, coffee, yoghurt, and others. There are some missing data entries: you may remove the rows ``Sweden", ``Finland", and ``Spain''. The goal is to perform PCA analysis on the data, i.e., find a way to perform linear combinations of features across all 20 food-item consumptions, for each country. If we extract two principal components, that means we use two singular vectors that correspond to the largest singular values of the data matrix, in combining features. You will need to implement PCA by writing your own code.
+\begin{enumerate}
+\item (15 points) Write down the set-up of PCA for this setting. Explain how the data matrix is set-up in this case (e.g., each dimension of the matrix correspond to what.) Explain in words how PCA is performed in this setting. 
+\item (15 points) Suppose we aim to find top $k$ principal components. Write down the mathematical optimization problem involved for solving this problem. Explain the procedure to find the top $k$ principal components in performing PCA. 
+\item (10 points) Find the top two principal component vectors for the dataset and plot them (plot a value of the vector as a one-dimensional function). Describe do you see any pattern. 
+\item (10 points) Now project each data point using the top two principal component vectors (thus now each data point will be represented using a two-dimensional vector). Draw a scatter plot of two-dimensional reduced representation for each country. What pattern can you observe?
+\end{enumerate}
+
+%\bibliographystyle{plain}
+%\bibliography{temp,externalPapers,groupPapers}
+
+\end{document}

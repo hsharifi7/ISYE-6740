@@ -1,0 +1,95 @@
+\documentclass[twoside,12pt]{article}
+\usepackage{amsmath,amsfonts,amsthm,fullpage,amssymb}
+%\usepackage{mymath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+
+\begin{document}
+
+\title{ISYE 6740, Homework 3}
+\author{Prof. Yao Xie}
+\date{}
+\maketitle
+
+
+
+
+%
+%\section{PCA for face recognition (25 points)}
+%
+%This question is a simplified illustration of using PCA for face recognition using a subset of data from the famous Yale Face dataset. 
+%
+% {\bf Remark:} you have to perform downsampling of the image by a factor of 4 to turn them into a lower resolution image before we do anything. 
+%
+%
+%\begin{enumerate}
+%\item 
+%First, given a set of images for each person, we generate the so-called eigenface using these images. The procedure to obtain eigenface is explained as follows. 
+%%
+%Given $n$ images of the {\it same person} denoted by $x_1, \ldots, x_n$. Each image originally is a matrix. We vectorize each image to form the vector $x_i \in \mathbb R^p$. Now form a matrix
+%\[
+%X = [x_1, \ldots, x_n] \in \mathbb R^{p\times n}.
+%\]
+%
+%Extract the largest $k$ eigenvector of the data matrix $X^\top X$, denoted as $u_1, u_2,  \ldots, u_k$. The eigenfaces correspond to the projections $\textsf{eigenface}_i = X u_i$, $i = 1, \ldots, k$.
+%
+%Perform analysis on the Yale face dataset for subject 14 and subject 01, respectively, using all the images EXCEPT for the two images named \textsf{subject01-test.gif} and \textsf{subject14-test.gif}. {\bf Plot the top 6 eigenfaces for each subject.} When visualizing, you have to reshape the eigenvectors into images with the same dimension as the original images. 
+%
+%{\bf What is the interpretation of the top 6 eigenfaces?}
+%
+%\item Now we will perform a face recognition task. 
+%
+%For doing face recognition through PCA we proceed as follows. Given the test image \textsf{subject01-test.gif} and \textsf{subject14-test.gif}, we vectorize each image. Take the top eigenfaces of Subject 1 and Subject 14, respectively, project the 2 vectorized test images using the vectorized eigenfaces to obtain scores, respectively. \\(Hint: use $\textsf{(eigenface}_1)^\top \textsf{(test image)}$ )
+%
+%Report four scores: (1) projecting test image of Subject 1 using eigenface of Subject 1; (2) projecting test image of Subject 1 using eigenface of Subject 14; (3) projecting test image of Subject 14 using eigenface of Subject 1; (4) projecting test image of Subject 14 using eigenface of Subject 14. 
+%
+%Explain whether or not (and how) can you recognize the faces of the test images using these scores. 
+%
+%
+%%See the example MATLAB code.  Now use \textsf{subject14.test.gif} to perform face recognition using the following procedure. 
+%\end{enumerate}
+
+
+\subsection*{1. Order of faces using ISOMAP (50 points)}
+
+The objective of this question is to reproduce the ISOMAP algorithm results that we have seen discussed in lecture as an excercise. The file \textsf{isomap.mat} (or \textsf{isomap.dat}) contains 698 images, corresponding to different poses of the same face. Each image is given as a 64 $\times$ 64 luminosity map, hence represented as a vector in $\mathbb R^{4096}$. This vector is stored as a row in the file. [This is one of the datasets used in the original paper for ISOMAP, J.B. Tenenbaum, V. de Silva, and J.C. Langford, Science 290 (2000) 2319-2323.]
+
+\begin{enumerate} 
+\item[(a)] (20 points) Choose the Euclidean distance between images (i.e., in this case a distance in $\mathbb R^{4096}$). Construct a similarity graph with vertices corresponding to the images, and tune the threshold $\epsilon$ so that each node has at least 100 neighbors. Visualize the similarity graph (e.g., plot the adjacency matrix, or visualize the graph and illustrate a few images corresponds to nodes at different parts of the graph; you can be a bit creative here).
+ 
+\item[(b)] (20 points) Implement the ISOMAP algorithm and apply it to this graph to obtain a $d$ = 2-dimensional embedding. %You may refer to the code \textsf{isomapII.m}. 
+Present a plot of this embedding. Find three points that are ``close'' to each other in the embedding space, and show what they look like. Do you see any visual similarity among them?
+
+\item[(c)] (10 points) Now choose $\ell_1$ distance (or Manhattan distance) between images (recall the definition from ``Clustering'' lecture)). Repeat the steps above. Again construct a similarity graph with vertices corresponding to the images, and tune the threshold $\epsilon$ so that each node has at least 100 neighbors. Implement the ISOMAP algorithm and apply it to this graph to obtain a $d$ = 2-dimensional embedding. Present a plot of this embedding.  Do you see any difference by choosing a different similarity measure? 
+
+\end{enumerate}
+
+\clearpage
+
+
+
+\subsection*{2. Density estimation: Psychological experiments. (50 points)}
+
+ The data set \textsf{n90pol.csv} contains information on 90 university students who participated in a psychological experiment designed to look for relationships between the size of different regions of the brain and political views. The variables \textsf{amygdala} and \textsf{acc} indicate the volume of two particular brain regions known to be involved in emotions and decision-making, the amygdala and the anterior cingulate cortex; more exactly, these are residuals from the predicted volume, after adjusting for height, sex, and similar body-type variables. The variable \textsf{orientation} gives the students' locations on a five-point scale from 1 (very conservative) to 5 (very liberal). %\textsf{orientation} is an ordinal but not a metric variable, so scores of 1 and 2 are not necessarily as far apart as scores of 2 and 3.
+ 
+ \begin{enumerate}
+ \item[(a)] (20 points) Form 2-dimensional histogram for the pairs of variables (\textsf{amygdala}, \textsf{acc}). Decide on a suitable number of bins so you can see the shape of the distribution clearly. 
+ 
+ \item[(b)] (20 points) Now implement kernel-density-estimation (KDE) to estimate the 2-dimensional with a two-dimensional density function of (\textsf{amygdala}, \textsf{acc}). Use a simple multi-dimensional Gaussian kernel, for \[x = \begin{bmatrix}x_1\\x_2\end{bmatrix}\in \mathbb R^2,\] where $x_1$ and $x_2$ are the two dimensions respectively \[K(x) = \frac{1}{\sqrt {2\pi}} e^{-\frac{(x_1^2 + x_2^2)}{2}}.\] Recall in this case, the kernel density estimator (KDE) for a density is given by
+ \[
+ p(x) = \frac 1 m \sum_{i=1}^m \frac 1 h
+ K\left(
+ \frac{x^i - x}{h}
+ \right),
+ \]
+ where $x^i$ are two-dimensional vectors, $h >0$ is the kernel bandwidth. Set an appropriate $h$ so you can see the shape of the distribution clearly. Plot of contour plot (like the ones in slides) for your estimated density. 
+ \item[(c)] (10 points) Plot the condition distribution of the volume of the \textsf{amygdala} as a function of political \textsf{orientation}: $p(\textsf{amygdala}|\textsf{orientation}=a)$, $a = 1, \ldots, 5$. Do the same for the volume of the 
+ \textsf{acc}. Plot $p(\textsf{acc}|\textsf{orientation}=a)$, $a = 1, \ldots, 5$. You may either use histogram or KDE to achieve the goal.
+ \end{enumerate}
+
+
+
+
+\end{document}

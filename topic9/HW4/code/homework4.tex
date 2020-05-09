@@ -1,0 +1,113 @@
+\documentclass[twoside,10pt]{article}
+\usepackage{amsmath,amsfonts,amsthm,fullpage,amssymb}
+%\usepackage{mymath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{url}
+
+
+\begin{document}
+
+\title{ISYE 6740 Homework 4\\ 
+\small Total 100 points.}
+%\author{Yao Xie}
+%\date{Deadline: Feb. 13, Sat., 11:55pm}
+\date{}
+\maketitle
+
+%----------------------------------------------------------------------------------
+
+
+%Note: {\bf Bonus Questions} are completely optional. But they will be used in contributing towards your 25\% of homework scores. For example, if you receive 10 bonus points, then this converts to $10\times 0.25=2.5$ points to your overall score. So if you want to do a bit extra work to improve your grades, this is a chance. You can ask questions about bonus questions, but please note that TA may provide less help to questions regarding these bonus questions because these are out of their normal workload, and the questions are a bit more challenging and out of the required scope of this class. You are expected to figure out the bonus questions more independently if you like to try. On the other hand, I do encourage you to try bonus questions because they are actually interesting extensions of what we have learned in this class, and you may find them quite interesting and enhance your understanding and broadening your horizon; and remember, we do give partial credits.  
+%%\item
+
+\begin{enumerate}
+
+\item {\bf Implementing EM algorithm for MNIST dataset. (50 points)} 
+
+ Implement the EM algorithm for fitting a Gaussian mixture model for the MNIST dataset. We reduce the dataset to be only two cases, of digits ``2'' and ``6'' only. Thus, you will fit GMM with $C = 2$. Use the data file \textsf{data.mat} or \textsf{data.dat} on Canvas. True label of the data are also provided in \textsf{label.mat} and \textsf{label.dat}
+
+%If you use MATLAB, you may use the following programs (see Canvas) to load the images and their labels:
+%\begin{verbatim}
+%images = loadMNISTImages('t10k-images-idx3-ubyte');
+%\end{verbatim}
+The matrix \textsf{images} is of size 784-by-1990, i.e., there are totally 1990 images, and each column of the matrix corresponds to one image of size 28-by-28 pixels (the image is vectorized; the original image can be recovered by map the vector into a matrix.) %, e.g., using MATLAB code, \textsf{reshape(images(:,1),28, 28)}.
+
+Hint: You may find the notes \textsf{speed-up-GMM.pdf} useful, which explains how to evaluate the density of a multi-variate normal distribution. In this homework question, it is recommended you implement the evaluation of the Gaussian density this way, to avoid numerical issues.
+
+\begin{enumerate}
+
+\item (5 points) Select from data one raw image of ``2'' and ``6'' and visualize them, respectively. 
+
+\item (15 points) Use random Gaussian vector with zero mean as random initial means, and two identity matrices $I$ as initial covariance matrices for the clusters. Plot the log-likelihood function versus the number of iterations to show your algorithm is converging.
+
+\item (15 points points) Report, the fitting GMM model when EM has terminated in your algorithms, including the weights for each component and the mean vectors (please reformat the vectors into 28-by-28 images and show these images in your submission). Ideally, you should be able to see these means corresponds to ``average'' images.  No need to report the covariance matrices. 
+
+\item (15 points) Use the $p_{ic}$ to infer the labels of the images, and compare with the true labels. Report the miss classification rate for digits ``2'' and ``6'' respectively. Perform $K$-means clustering with $K=2$ (you may call a package or use the code from your previous homework). Find out the  miss classification rate for digits ``2'' and ``6'' respectively, and compare with GMM. Which one achieves the better performance?
+
+%\verbatim{labels = loadMNISTLabels('t10k-labels-idx1-ubyte');}
+
+\end{enumerate}
+
+\clearpage
+
+\item {\bf Basic optimization. (50 points.)}
+
+The background of logistic regression will be discussed in the next lecture. Here, we just focus on finding out the property of the optimization problem, related to training a logistic regression. 
+
+Consider a simplified logistic regression problem. 
+Given $m$ training samples $(x_i, y_i)$, $i = 1, \ldots, n$. The data $x_i \in \mathbb R$, and $y_i \in \{0, 1\}$.  To train/fit a logistic regression model for classification, we solve the following optimization problem, where $\theta \in \mathbb R$ is a parameter we aim to find:
+\begin{equation}
+\max_\theta \ell (\theta), \label{eqn}
+\end{equation}
+where the log-likelhood function \[\ell(\theta) = \sum_{i=1}^n \left\{-\log (1+\exp\{-\theta x_i\}) + (y_i-1) \theta x_i\right\}.\]
+
+\begin{enumerate}
+\item (15 points) Derive the gradient of the cost function $\ell(\theta)$ in (\ref{eqn}) and write a {\bf pseudo-code} for performing {\bf gradient descent} to find the optimizer $\theta^*$. This is essentially what the training procedure does. pseudo-code  means you will write down the procedure in steps for the algorithm, not necessarily any specific programming language. 
+\item (15 points) Write down a {\bf stochastic gradient descent} algorithm to solve the training of logistic regression problem (\ref{eqn}). 
+\item (20 points) {\bf Show that the training problem in basic logistic regression problem is concave.} Derive the Hessian matrix of $\ell(\theta)$ and based on this, show the training problem (\ref{eqn}) is concave. Explain why the problem can be solved efficiently and gradient descent will achieve a unique global optimizer, as we discussed in the lecture. 
+
+\end{enumerate}
+ 
+%\item {\bf Deriving M-step in EM for GMM.} (15 points. Hint: Deriving using Lagrangian multiplier for the one-constraint.)
+%
+%Consider the $Q$ function in EM for GMM:
+%\[
+%Q(\theta|\theta_k) = \sum_{i=1}^n \sum_{c=1}^C p_{i, c} \log \pi_c
+%+ \sum_{i=1}^n \sum_{c=1}^C p_{i, c} \log \phi(x_i|\mu_c, \Sigma_c)
+%\] 
+%where $\theta= \{\pi_c, \mu_c, \Sigma_c\}_{c=1, \ldots, C}$, and  $p_{i,c} \propto \pi_c^{(k)} \phi(x_i|\mu_c^{(k)}, \Sigma_c^{(k)})$, $i = 1, \ldots, n$, $c = 1, \ldots, C$ depend on the parameters from the previous iteration. Here $\phi(x|\mu, \Sigma)$ denotes the pdf of a multi-variate Gaussian with mean vector $\mu$ and covariance matrix $\Sigma$. 
+%
+%Solve $\pi_c$, $\mu_c$ and $\Sigma_c$ that maximize the $Q(\theta|\theta_k)$ function.
+%In other words, we want to find
+%\begin{equation*}
+%\begin{split}
+%\theta_{k+1} := \arg\max_{\theta} &\quad Q(\theta|\theta_k)\\
+%\mbox{subject to} &\quad \sum_{c = 1}^C \pi_{c} = 1.
+%\end{split}
+%\end{equation*}
+%Show that the solution $\theta_{k+1}$ is given by the following expression
+%\[
+%\pi_c^{(k+1)} = \frac{\sum_{i=1}^n p_{i,c}}{n}
+%\]
+%\[
+%\mu_c^{(k+1)}  = \frac{\sum_{i=1}^n p_{i,c} x_i}{\sum_{i=1}^n p_{i,c}}
+%\]
+%\[
+%\Sigma_c^{(k+1)} = \frac{\sum_{i=1}^n p_{i,c} (x_i - \mu_c^{(k)})(x_i - \mu_c^{(k)})^T}{\sum_{i=1}^n p_{i,c}}
+%\]
+%(Hint: Consider the Lagrangian function for solving this constrained optimization problem. You only need to introduce one Lagrangian multiplier because you only have one constraint. Then solve it from there.)
+%
+%
+%
+%
+%
+
+
+
+
+\end{enumerate}
+
+
+\end{document}
